@@ -1,8 +1,10 @@
 % forked off of the bare_jrnl template, for reference
-\documentclass[10pt,journal,onecolumn,draftclsnofoot]{IEEEtran}
+\documentclass[10pt,peerreview,onecolumn,draftclsnofoot,technote]{IEEEtran}
+% \documentclass[10pt,journal,onecolumn,draftclsnofoot,titlepage]{IEEEtran}
+
+\usepackage{setspace}
 
 % *** GRAPHICS RELATED PACKAGES ***
-%
 \ifCLASSINFOpdf
   \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
@@ -26,6 +28,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 \begin{document}
+\singlespacing
 \title{Spatial Visualization\\ of Biodiversity}
 
 \author{Ty~Skelton,
@@ -71,6 +74,7 @@ product meets their needs.
 biodiversity, visualization
 \end{IEEEkeywords}
 
+% \IEEEpeerreviewmaketitle
 \IEEEpeerreviewmaketitle
 
 \section{Project Purposes and Goals} % @TODO: JASPER
