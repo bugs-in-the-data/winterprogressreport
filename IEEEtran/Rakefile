@@ -1,9 +1,9 @@
 desc "Compile into report"
 task :compile do
-  `pandoc final_paper.tex -o team23WinterProgress.pdf ; open team23WinterProgress.pdf`
+  `pdflatex final_paper.tex; open final_paper.pdf`
 end
 
 desc "Tar and gzip project"
 task :tar do
-  `tar czvf winterReport.tar.gz final_paper.tex team23WinterProgress.pdf`
+  `tar czvf winterReport.tar.gz final_paper.tex final_paper.pdf`
 end

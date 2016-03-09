@@ -1,6 +1,27 @@
 % forked off of the bare_jrnl template, for reference
 \documentclass[journal]{IEEEtran}
 
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  \graphicspath{images/}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \{.eps}
+\fi
+
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -90,7 +111,7 @@ Our web server configuration is fairly minimal at the moment. We are still
 early in development, which means we’re making all of our features on our local
 machines. Apache does not require much set up to deploy your projects to
 localhost. The only real challenge with getting Apache up and running was
-installing one dependency called “MOD_WSGI” which is required for Apache to
+installing one dependency called MOD-WSGI which is required for Apache to
 serve Django content to the web, even on localhost.
 
 
@@ -130,7 +151,7 @@ template clean and organized.
 \begin{figure}[h]
 \caption{Figure 1 - Overall site layout view.}
 \centering
-\includegraphics[width=1.0\textwidth]{images/figure_1.jpg}
+\includegraphics[width=0.45\textwidth]{images/figure_1.jpg}
 \end{figure}
 
 The main challenge with developing our single page web-app was providing data
@@ -161,7 +182,7 @@ them up.
 \begin{figure}[h]
 \caption{Graph View}
 \centering
-\includegraphics[width=1.0\textwidth]{images/figure_6.jpg}
+\includegraphics[width=0.45\textwidth]{images/figure_6.jpg}
 \end{figure}
 
 One of the graphs that we were successful in dynamically rendering data into
