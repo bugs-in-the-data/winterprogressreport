@@ -1,5 +1,5 @@
 % forked off of the bare_jrnl template, for reference
-\documentclass[journal]{IEEEtran}
+\documentclass[10pt,journal,onecolumn,draftclsnofoot]{IEEEtran}
 
 % *** GRAPHICS RELATED PACKAGES ***
 %
@@ -93,10 +93,10 @@ selected in the Filter View.
 
 \section{Progress to Date}
 
-\subsection{Base Website Setup} % @TODO: TY
+\subsection{Base Website Setup} % @TODO: TY - Base Website Setup
 When we were doing our technology review in preparation for writing our design document, we decided on using Django for our web framework, Apache for our web server, Git for our version control system, MySQL for our database, Bootstrap for our front end framework, and c3/arcGIS for our graphing/map views.
-We’ve organized and set up our back-end web framework correctly for our web app.
-Since Django ships it’s beginning web structure in a very minimalistic state, (i.e. their templates, views, and models all in just one file with no app structure) We had to modularize those components into their own directories and files.
+We’ve since organized and set up our back-end web framework correctly for our web app.
+Since Django ships its beginning web structure in a very minimalistic state, (i.e. their templates, views, and models all in just one file with no app structure) We had to modularize those components into their own directories and files.
 It wasn’t a long and arduous process, but it did take a bit of time learning how to go about doing that since we were all new to using Django.
 
 Our web server configuration is fairly minimal at the moment.
@@ -115,7 +115,7 @@ We have our system tied to the database perfectly and we are rendering data from
 Our front end framework we chose to implement was Bootstrap.
 Bootstrap is a very well defined CSS/HTML framework and has seen use all kinds of applications, whatever the scale.
 
-\subsection{Main Layout} % @TODO: TY
+\subsection{Main Layout} % @TODO: TY - Main Layout
 As dictated in the design document, the main layout of the index page of our app is split into three sections.
 Each section has been individually developed by each member of the team.
 The top left view has an interactable map in a container.
@@ -139,9 +139,9 @@ We have written models that map objects to database entries and allow us to prov
 \subsection{Map View}
 % @TODO: ALEC
 
-\subsection{Graph View} % @TODO: TY
+\subsection{Graph View} % @TODO: TY - Graph View
 The graph view portion of our web tool is alpha-level ready.
-We have interactable example charts already deployed that render  static data.
+We have inter-actable example charts already deployed that render  static data.
 A couple of them even have data being dynamically loaded into them from the database, but that wasn’t an alpha-level goal for us, so we are focusing on that for the beta release.
 The particular statistics of interest haven’t been nailed-down yet, so our sponsor wanted us to have a proof-of-concept with just displaying how example graphs would look.
 We are able to customize every aspect of them in regards to color, spacing, font, layout, etc.
@@ -188,11 +188,9 @@ Come beta release, we will be providing dynamic data to each template and hopefu
 
 \section{Remaining Work}
 
-\subsection{Requests Between Views}
-% @TODO: TY
+\subsection{Requests Between Views} % @TODO: TY - Requests Between Views
 
-\subsection{Filter to Graph}
-% @TODO: TY
+\subsection{Filter to Graph} % @TODO: TY - Filter to Graph
 
 \subsection{Filter to Map}
 % @TODO: ALEC
