@@ -46,27 +46,18 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract} % @TODO: JASPER
-The Department of Integrative Biology at Oregon State has collected a large
-sample of biodiversity data from various sites in the United States. Handling
-this data in its raw form requires certain technical knowledge of databases, as
-well as bit of patience. This presents a problem for biodiversity researchers
-and Department of Defense land managers, who need to be able to understand and
-make decisions about this data easily. Our team will address this problem by
-creating a web interface for spatially visualizing this data. We will enable
-users to easily display useful statistics, graphs, and maps about areas and
-species of interest, putting the information they care about most at their
-fingertips.
-The Department of Defense made an investment in collecting all these samples so
-that it could better manage its land. However, extracting meaning from that
-information is challenging for land managers and researchers alike. A good
-solution to this problem would allow users to easily access the information
-that is important to them. Our solution will provide an interactive map
-overlaid with tools that allow users to easily select information of interest
-and display useful graphs and statistics about it. Passerby at Expo will be
-invited to interact with our system and discover meaningful biodiversity
-information for themselves. Oregon State biodiversity researchers and
-Department of Defense land managers will provide feedback on how well our
-product meets their needs.
+The Department of Integrative Biology at Oregon State has collected a large sample of biodiversity data from various sites in the Southwest United States.
+Handling this data in its raw form requires certain technical knowledge of databases, as well as a bit of patience.
+This presents a problem for biodiversity researchers and Department of Defense land managers, who need to be able to understand and make decisions about this data easily.
+Our team will address this problem by creating a web interface for spatially visualizing this data.
+We will enable users to easily display useful graphs and maps about areas and species of interest, putting the information they care about most at their fingertips.
+
+The Department of Defense made an investment in collecting all these samples so that it could better manage its land.
+However, extracting meaning from that information is challenging for land managers and researchers alike.
+A good solution to this problem would allow users to easily access the information that is important to them.
+Our solution will provide an interface that allows users to select information of interest and see it in map and graph form.
+Passerby at Expo will be invited to interact with our system and discover meaningful biodiversity patterns for themselves.
+Oregon State biodiversity researchers will provide feedback on how well our product meets their needs.
 
 \end{abstract}
 
@@ -78,24 +69,18 @@ biodiversity, visualization
 \IEEEpeerreviewmaketitle
 
 \section{Project Purposes and Goals} % @TODO: JASPER
-This project aims to aid researchers and land managers in drawing meaningful
-conclusions from a large set of insect biodiversity data. The Department of
-Defense funded researchers to collect insect samples from many sites across the
-American Southwest over five years. The resulting dataset is too cumbersome to
-make sense of in raw form, especially for land managers with little formal
-knowledge of database operations. Our goal is to create a visualization system
-that allows these parties to select information of interest, display it on a
-map, and show useful graphs and statistics from it.
+This project aims to aid researchers and land managers in drawing meaningful conclusions from a large set of insect biodiversity data.
+The Department of Defense funded researchers to collect insect samples from many sites across the American Southwest over five years.
+The resulting dataset is too cumbersome to make sense of in raw form, especially for land managers with little formal knowledge of database operations.
+Our goal is to create a visualization system that allows these parties to select information of interest, display it on a map, and show useful graphs about it.
+
+These requirements led us to a design comprised of three views.
+The Filter View allows users to select which data will be displayed by date, season, species, or location.
+The Map View shows the locations of the selected samples.
+The Graph View shows graphs of the data selected in the Filter View broken down by location, taxa, and time.
 
 
-These requirements led us to a design comprised of three views. The Filter
-View will allow users to select which data will be displayed by date, by
-species, or by location. The Map View will show the locations of the selected
-sites and drainages. The Graph View will show graphs and statistics of the data
-selected in the Filter View.
-
-
-\section{Progress to Date}
+\section{Progress}
 
 \subsection{Base Website Setup} % @TODO: TY - Base Website Setup
 When we were doing our technology review in preparation for writing our design document, we decided on using Django for our web framework, Apache for our web server, Git for our version control system, MySQL for our database, Bootstrap for our front end framework, and c3/arcGIS for our graphing/map views.
@@ -122,14 +107,14 @@ Bootstrap is a very well defined CSS/HTML framework and has seen use all kinds o
 \subsection{Main Layout} % @TODO: TY - Main Layout
 As dictated in the design document, the main layout of the index page of our app is split into three sections.
 Each section has been individually developed by each member of the team.
-The top left view has an interactable map in a container.
-In the top right there is a panel for filtering the data that is supplied to the other two views.
+The top right view has an interactive map in a container.
+In the top left there is a panel for filtering the data that is supplied to the other two views.
 It has drop downs and date filters for better narrowing a field of data to fit what the user is looking for.
 Finally, the index’s bottom container has a side-scrolling graph view that provides useful metrics on what the data consists of.
 Each contained view has its own template that is embedded in a primary main template in an effort to keep the main template clean and organized.
 
 \begin{figure}[h]
-\caption{Figure 1 - Overall site layout view.}
+\caption{Overall site layout view.}
 \centering
 \includegraphics[width=0.45\textwidth]{images/figure_1.jpg}
 \end{figure}
@@ -139,6 +124,82 @@ We have written models that map objects to database entries and allow us to prov
 
 \subsection{Filter View}
 % @TODO: JASPER
+
+The Filter View allows users to select information of interest by date, season, biological taxonomy, or site.
+Selections made in the Filter View affect what is shown in the Map and Graph Views.
+When the Filter View first loads, the user sees the pane shown in Figure \ref{fig:overall_filter}.
+By default, all data are selected.
+The Date Range Filter begins populated with dates that capture the full range of data collection. 
+The Season Filter begins with all four seasons selected.
+The Taxa Filter and the Site Filter begin fully collapsed, with the highest level selected.
+
+\begin{figure}[h]
+\caption{
+  The Filter view contains four tiled filters, Date, Season, Taxa, and Location.
+  By default, all data are selected and all children collapsed.
+}
+\centering
+\includegraphics[width=0.45\textwidth]{images/overall_filter.png}
+\label{fig:overall_filter}
+\end{figure}
+
+When the user makes selections in the Filter View, the Filter button changes color, as demonstrated in Figure \ref{fig:date_filter}.
+Clicking on the Filter button applies the selections made in the Filter View to the other two views.
+Selections made in the Filter View persist on submission, so that the user can make selections serially.
+
+The Date Filter allows users to view data from between a range of dates.
+Clicking on either date field opens up a date range picker, shown in Figure \ref{fig:date_filter}.
+Users can also type in the date manually.
+This causes the Graph View to only graph data collected between these two dates.
+The Season Filter allows users to view data collected during certain seasons across all years.
+
+\begin{figure}[h]
+\caption{
+  When selections are made in the Filter View, the Filter Button changes color to indicate that submission is necessary.
+  The Date Filter includes a date range picker.
+}
+\centering
+\includegraphics[width=0.45\textwidth]{images/date_filter.png}
+\label{fig:date_filter}
+\end{figure}
+
+The Taxa Filter, shown in Figure \ref{fig:taxa_filter}, allows users to select orders, families, gena, and species of interest hierarchically.
+Users can select a radio button at any level in the hierarchy.
+Selecting a parent node in the Taxa Filter supplies all the data from its children and none of the data from its siblings to the Graph View.
+The Site Filter, shown in Figure \ref{fig:location_filter}, allows users to select bases, drainages, sites, and samples of interest hierarchically.
+Selecting a parent node in the Site Filter supplies all the data from its children and none of the data from its siblings to the Graph and Map Views.
+Users can click on the triangle next to each parent to toggle whether its children are collapsed or expanded.
+Expanding or collapsing children simply determines whether or not they show on screen, and does not affect selection.
+
+\begin{figure}[h]
+\caption{
+  The Taxa Filter allows the user to select an arbitrary level of biological taxonomy and all its children.
+}
+\centering
+\includegraphics[width=0.25\textwidth]{images/taxa_filter.png}
+\label{fig:taxa_filter}
+\end{figure}
+
+\begin{figure}[h]
+\caption{
+  The Location Filter allows the user to select an arbitrary location and all its children.
+}
+\centering
+\includegraphics[width=0.25\textwidth]{images/location_filter.png}
+\label{fig:location_filter}
+\end{figure}
+
+Jasper was assigned to developing the Filter View.
+The main obstacle he faced was not any of the filters themselves, but rather the learning curve for the development workflow.
+His experience using git for collaborative projects was limited, so on multiple occasions he called for help from the others.
+His experience with web development was also limited, so tasks such as setting up a server required assistance.
+
+When it came to writing code, the Filter View presented two main challenges.
+The first was extracting meaningul information from the data posted by the filters.
+To do this, we created a Filter Helper class that populates a dictionary with all the relevant fields for refining queries.
+The second major challenge was making filter selections persistent.
+To do this, we had to embed code in our html template to populate the fields from the data in the Filter Helper dictionary.
+As such, data flows from the input forms in the Filter View, to the Filter Helper dictionary, back to the input forms.
 
 \subsection{Map View}
 % @TODO: ALEC
@@ -190,7 +251,8 @@ Come beta release, we will be providing dynamic data to each template and hopefu
 \subsection{Database and Preparing Data}
 % @TODO: ALEC
 
-\section{Remaining Work}
+% Because 
+% \section{Remaining Work}
 
 \subsection{Requests Between Views} % @TODO: TY - Requests Between Views
 
