@@ -3,6 +3,7 @@
 % \documentclass[10pt,journal,onecolumn,draftclsnofoot,titlepage]{IEEEtran}
 
 \usepackage{setspace}
+\usepackage{caption}
 
 % *** GRAPHICS RELATED PACKAGES ***
 \ifCLASSINFOpdf
@@ -88,8 +89,9 @@ We’ve since organized and set up our back-end web framework correctly for our 
 Since Django ships its beginning web structure in a very minimalistic state, (i.e. their templates, views, and models all in just one file with no app structure) We had to modularize those components into their own directories and files.
 It wasn’t a long and arduous process, but it did take a bit of time learning how to go about doing that since we were all new to using Django.
 
-Our web server configuration is fairly minimal at the moment.
-We are still early in development, which means we’re making all of our features on our local machines.
+Our web server configuration for development is fairly minimal at the moment.
+We are still development, which means we’re making all of our features on our local machines.
+However, we are now beginning the process of deployment and have gone through the proper channels for gaining access to a remote server that we will put our web tool on.
 Apache does not require much set up to deploy your projects to localhost.
 The only real challenge with getting Apache up and running was installing one dependency called MOD-WSGI which is required for Apache to serve Django content to the web, even on localhost.
 
@@ -114,9 +116,10 @@ Finally, the index’s bottom container has a side-scrolling graph view that pro
 Each contained view has its own template that is embedded in a primary main template in an effort to keep the main template clean and organized.
 
 \begin{figure}[h]
-\caption{Overall site layout view.}
 \centering
-\includegraphics[width=0.45\textwidth]{images/figure_1.jpg}
+\includegraphics[width=0.75\textwidth]{images/figure_1.jpg}
+\captionsetup{justification=centering}
+\caption{Overall site layout view.}
 \end{figure}
 
 The main challenge with developing our single page web-app was providing data to the various tools we’re making use of in our different containers.
@@ -129,18 +132,19 @@ The Filter View allows users to select information of interest by date, season, 
 Selections made in the Filter View affect what is shown in the Map and Graph Views.
 When the Filter View first loads, the user sees the pane shown in Figure \ref{fig:overall_filter}.
 By default, all data are selected.
-The Date Range Filter begins populated with dates that capture the full range of data collection. 
+The Date Range Filter begins populated with dates that capture the full range of data collection.
 The Season Filter begins with all four seasons selected.
 The Taxa Filter and the Site Filter begin fully collapsed, with the highest level selected.
 
 \begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{images/overall_filter.png}
+\label{fig:overall_filter}
+\captionsetup{justification=centering}
 \caption{
   The Filter view contains four tiled filters, Date, Season, Taxa, and Location.
   By default, all data are selected and all children collapsed.
 }
-\centering
-\includegraphics[width=0.45\textwidth]{images/overall_filter.png}
-\label{fig:overall_filter}
 \end{figure}
 
 When the user makes selections in the Filter View, the Filter button changes color, as demonstrated in Figure \ref{fig:date_filter}.
@@ -154,13 +158,14 @@ This causes the Graph View to only graph data collected between these two dates.
 The Season Filter allows users to view data collected during certain seasons across all years.
 
 \begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{images/date_filter.png}
+\label{fig:date_filter}
+\captionsetup{justification=centering}
 \caption{
   When selections are made in the Filter View, the Filter Button changes color to indicate that submission is necessary.
   The Date Filter includes a date range picker.
 }
-\centering
-\includegraphics[width=0.45\textwidth]{images/date_filter.png}
-\label{fig:date_filter}
 \end{figure}
 
 The Taxa Filter, shown in Figure \ref{fig:taxa_filter}, allows users to select orders, families, gena, and species of interest hierarchically.
@@ -172,21 +177,23 @@ Users can click on the triangle next to each parent to toggle whether its childr
 Expanding or collapsing children simply determines whether or not they show on screen, and does not affect selection.
 
 \begin{figure}[h]
-\caption{
-  The Taxa Filter allows the user to select an arbitrary level of biological taxonomy and all its children.
-}
 \centering
 \includegraphics[width=0.25\textwidth]{images/taxa_filter.png}
 \label{fig:taxa_filter}
+\captionsetup{justification=centering}
+\caption{
+  The Taxa Filter allows the user to select an arbitrary level of biological taxonomy and all its children.
+}
 \end{figure}
 
 \begin{figure}[h]
-\caption{
-  The Location Filter allows the user to select an arbitrary location and all its children.
-}
 \centering
 \includegraphics[width=0.25\textwidth]{images/location_filter.png}
 \label{fig:location_filter}
+\captionsetup{justification=centering}
+\caption{
+  The Location Filter allows the user to select an arbitrary location and all its children.
+}
 \end{figure}
 
 Jasper was assigned to developing the Filter View.
@@ -214,9 +221,10 @@ An example of what the graph-portion looks like is shown above.
 When the page is resized to be smaller, the graph window view will display a horizontal scroll bar so that the user can still see the metrics they’re interested in without having to scrunch them up.
 
 \begin{figure}[h]
-\caption{Graph View}
 \centering
 \includegraphics[width=0.45\textwidth]{images/figure_6.jpg}
+\captionsetup{justification=centering}
+\caption{Graph View}
 \end{figure}
 
 One of the graphs that we were successful in dynamically rendering data into was the pie-chart that displayed the number of biodiversity readings within a specific order.
@@ -224,9 +232,10 @@ Since this was just an attempt to render data from the database on-load, it’s 
 We just wanted to have the biodiversity distribution pie chart available for alpha along with some way to prove we could get data dynamically from the database.
 
 \begin{figure}[h]
-\caption{Pie chart showing order distribution}
 \centering
 \includegraphics[width=0.25\textwidth]{images/figure_7.jpg}
+\captionsetup{justification=centering}
+\caption{Pie chart showing order distribution}
 \end{figure}
 
 The graph below displays a functionality in c3 that is really useful and is one of the primary reasons that we chose c3 as our graphing library for development.
@@ -236,9 +245,10 @@ There could even be multiple that are dominated by one large collection.
 If the user wants to ‘zoom in’ on those particular small readings, they could just hide the dominating dataset by clicking its label.
 
 \begin{figure}[h]
-\caption{Showing the interactive pie chart}
 \centering
 \includegraphics[width=0.25\textwidth]{images/figure_8.jpg}
+\captionsetup{justification=centering}
+\caption{Showing the interactive pie chart}
 \end{figure}
 
 During development we encountered some varyingly-sized problems that slowed us down, but we were able to overcome them before alpha release.
@@ -251,7 +261,7 @@ Come beta release, we will be providing dynamic data to each template and hopefu
 \subsection{Database and Preparing Data}
 % @TODO: ALEC
 
-% Because 
+% Because
 % \section{Remaining Work}
 
 \subsection{Requests Between Views} % @TODO: TY - Requests Between Views
