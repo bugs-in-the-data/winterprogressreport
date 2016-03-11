@@ -102,7 +102,7 @@ We have our system tied to the database perfectly and we are rendering data from
 Our front end framework we chose to implement was Bootstrap.
 Bootstrap is a very well defined CSS/HTML framework and has seen use all kinds of applications, whatever the scale.
 
-\subsection{Main Layout} % @TODO: TY - Main Layout
+\subsection{Main Layout} % @NOTE: TY - Main Layout
 As dictated in the design document, the main layout of the index page of our app is split into three sections.
 Each section has been individually developed by each member of the team.
 The top right view has an interactive map in a container.
@@ -122,8 +122,7 @@ Each contained view has its own template that is embedded in a primary main temp
 The main challenge with developing our single page web-app was providing data to the various tools we’re making use of in our different containers.
 We have written models that map objects to database entries and allow us to provide serialized data to our templates.
 
-\subsection{Filter View}
-% @TODO: JASPER
+\subsection{Filter View} % @TODO: JASPER
 
 The Filter View allows users to select information of interest by date, season, biological taxonomy, or site.
 Selections made in the Filter View affect what is shown in the Map and Graph Views.
@@ -205,10 +204,9 @@ The second major challenge was making filter selections persistent.
 To do this, we had to embed code in our html template to populate the fields from the data in the Filter Helper dictionary.
 As such, data flows from the input forms in the Filter View, to the Filter Helper dictionary, back to the input forms.
 
-\subsection{Map View}
-% @TODO: ALEC
+\subsection{Map View} % @TODO: ALEC
 
-\subsection{Graph View} % @TODO: TY - Graph View
+\subsection{Graph View} % @NOTE: TY - Graph View
 The graph view portion of our web tool is beta-level ready.
 We have fully developed charts deployed that render dynamically-loaded data based off of filter input.
 Our goal with these graphs for the beta release was to have each one not only pulling in data from the database, but rendering it in the correct way with x-values and labels set to whatever the parameters of interest implied.
@@ -225,19 +223,28 @@ When the page is resized to be smaller, the graph window view will display a hor
 \label{fig:graph_view}
 \end{figure}
 
-One of the graphs that we were successful in dynamically rendering data into was the pie-chart that displayed the number of biodiversity readings within a specific order.
-Since this was just an attempt to render data from the database on-load, it’s not actually a graph that we will show when in production, because it could be specified for genus or species.
-We just wanted to have the biodiversity distribution pie chart available for alpha along with some way to prove we could get data dynamically from the database.
+The three different graphs that we were successfully able to pull data into and render meaningful statistics in were the stacked bar chat, pie chart and line chart.
+The stacked bar chart is showing the number of unique taxa within a certain taxonomic level at each location.
+The pie chart is showing the distribution of unique taxa overall for all locations within the scope selected by the user.
+Finally, the line chart is showing the number of unique taxa observed across all locations over time (years).
+
+After the filter view submits a POST request to the index controller and figures out the parameters of interest (described in the filter section) an object with the necessary information is passed to the graph view.
+Since the currency for the graph view is unique taxa observed, all the database queries and data massaging takes place in the subsample model.
+After a particular graph retrieves the filter object it passes a generic query and refines it based on what the user is interested in.
+Django uses lazy loading, meaning the query object is never processed until the code tries to parse it.
+After the model gets the necessary information it has to format the two dimensional array in a very peculiar fashion for our graphing library to handle it (C3.js).
+After it's formatted correctly, the model returns the array of arrays to the view, which stores it in the data object that is embedded in the view.
+C3.js is loaded in the template as well, so we just embed the data object using Django's templating tools so it's parsed on load after all the dependencies.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.35\textwidth]{images/pie_chart.jpg}
+\includegraphics[width=0.70\textwidth]{images/bar_chart.png}
 \captionsetup{justification=centering}
-\caption{Pie chart showing order distribution}
-\label{fig:pie_chart}
+\caption{Stacked bar chart showing order distribution across locations}
+\label{fig:bar_chart}
 \end{figure}
 
-The graph below displays a functionality in c3 that is really useful and is one of the primary reasons that we chose c3 as our graphing library for development.
+The graph in Figure~\ref{fig:bar_chart_collapsed} displays a functionality in c3 that is really useful and is one of the primary reasons that we chose c3 as our graphing library for development.
 If the user is to click (or touch on a touchpad) the label for a particular dataset within a graph, then the graph will hide that dataset and focus on only the remaining.
 This is a very important functionality, because when taking biodiversity readings there could be an under-represented species or genus that only shares a small percentage of the dataset.
 There could even be multiple that are dominated by one large collection.
@@ -245,34 +252,22 @@ If the user wants to ‘zoom in’ on those particular small readings, they coul
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.35\textwidth]{images/pie_chart_collapsed.jpg}
+\includegraphics[width=0.70\textwidth]{images/bar_chart_collapsed.png}
 \captionsetup{justification=centering}
-\caption{Showing the interactive pie chart}
-\label{fig:pie_chart_collapsed}
+\caption{Showing the interactive stacked bar chart labels}
+\label{fig:bar_chart_collapsed}
 \end{figure}
 
-During development we encountered some varyingly-sized problems that slowed us down, but we were able to overcome them before alpha release.
-Even though providing data to the graph view dynamically from the database was not a primary goal for the alpha, it was a very challenging process.
+During development we encountered some varyingly-sized problems that slowed us down, but we were able to overcome them before beta release.
+The ability to supply data and render accurate graphs dynamically was our goal for the graph view come beta release, but it took some hard work to get it to the point it's at.
 None of us have used Django in the past and its ORM (object relational mapping) model structure, for constructing and querying objects from the database, was completely foreign to us.
-Once we were able to learn how Django does it’ s aggregate queries to the database it became a little bit more clear how to perform our queries, but it still proves to be challenging.
-We were able to get the correct data to render in one or two graphs, but the process of getting exactly the data we need along with massaging it into the format required by c3 (and arcGIS, filter, etc.) is a challenge in itself as well.
-Come beta release, we will be providing dynamic data to each template and hopefully filtering/interacting between them.
+Once we were able to learn how Django does it’s aggregate queries to the database it became a little bit more clear how to perform our queries, but it still proves to be challenging.
+Early on after alpha release we were able to get all the static data supplied to the graphs replaced with dynamic data.
+The end was in sight, but the ability to render dynamic x-values, labels, and y-values quickly became very difficult and it required a lot of clever problem solving to find a way to piggy-back data filtration logic in our filter helper models.
+Once we were able to break through those barriers everything seemed to tone down in difficulty.
+As we enter into the production-level phase of development we'll be doing much more polish and refinement than actual feature implementation, which is where we wanted to be.
 
 \subsection{Database and Preparing Data}
 % @TODO: ALEC
-
-% Because
-% \section{Remaining Work}
-
-\subsection{Requests Between Views} % @TODO: TY - Requests Between Views
-
-\subsection{Filter to Graph} % @TODO: TY - Filter to Graph
-
-\subsection{Filter to Map}
-% @TODO: ALEC
-
-\subsection{What the Graph View Displays}
-% @TODO: JASPER
-
 
 \end{document}
