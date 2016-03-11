@@ -1,6 +1,4 @@
-% forked off of the bare_jrnl template, for reference
-\documentclass[10pt,peerreview,onecolumn,draftclsnofoot,technote]{IEEEtran}
-% \documentclass[10pt,journal,onecolumn,draftclsnofoot,titlepage]{IEEEtran}
+\documentclass[10pt,draftclsnofoot,onecolumn]{IEEEtran}
 
 \usepackage{setspace}
 \usepackage{caption}
@@ -29,6 +27,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 \begin{document}
+\pagenumbering{gobble}
 \singlespacing
 \title{Spatial Visualization\\ of Biodiversity}
 
@@ -61,13 +60,10 @@ Passerby at Expo will be invited to interact with our system and discover meanin
 Oregon State biodiversity researchers will provide feedback on how well our product meets their needs.
 
 \end{abstract}
-
-\begin{IEEEkeywords}
-biodiversity, visualization
-\end{IEEEkeywords}
-
-% \IEEEpeerreviewmaketitle
 \IEEEpeerreviewmaketitle
+
+\newpage
+\pagenumbering{arabic}
 
 \section{Project Purposes and Goals} % @TODO: JASPER
 This project aims to aid researchers and land managers in drawing meaningful conclusions from a large set of insect biodiversity data.
@@ -83,7 +79,7 @@ The Graph View shows graphs of the data selected in the Filter View broken down 
 
 \section{Progress}
 
-\subsection{Base Website Setup} % @TODO: TY - Base Website Setup
+\subsection{Base Website Setup} % @NOTE: TY - Base Website Setup
 When we were doing our technology review in preparation for writing our design document, we decided on using Django for our web framework, Apache for our web server, Git for our version control system, MySQL for our database, Bootstrap for our front end framework, and c3/arcGIS for our graphing/map views.
 We’ve since organized and set up our back-end web framework correctly for our web app.
 Since Django ships its beginning web structure in a very minimalistic state, (i.e. their templates, views, and models all in just one file with no app structure) We had to modularize those components into their own directories and files.
@@ -117,9 +113,10 @@ Each contained view has its own template that is embedded in a primary main temp
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{images/figure_1.jpg}
+\includegraphics[width=0.75\textwidth]{images/main_layout.png}
 \captionsetup{justification=centering}
 \caption{Overall site layout view.}
+\label{fig:layout}
 \end{figure}
 
 The main challenge with developing our single page web-app was providing data to the various tools we’re making use of in our different containers.
@@ -130,7 +127,7 @@ We have written models that map objects to database entries and allow us to prov
 
 The Filter View allows users to select information of interest by date, season, biological taxonomy, or site.
 Selections made in the Filter View affect what is shown in the Map and Graph Views.
-When the Filter View first loads, the user sees the pane shown in Figure \ref{fig:overall_filter}.
+When the Filter View first loads, the user sees the pane shown in Figure~\ref{fig:overall_filter}.
 By default, all data are selected.
 The Date Range Filter begins populated with dates that capture the full range of data collection.
 The Season Filter begins with all four seasons selected.
@@ -139,20 +136,20 @@ The Taxa Filter and the Site Filter begin fully collapsed, with the highest leve
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{images/overall_filter.png}
-\label{fig:overall_filter}
 \captionsetup{justification=centering}
 \caption{
   The Filter view contains four tiled filters, Date, Season, Taxa, and Location.
   By default, all data are selected and all children collapsed.
 }
+\label{fig:overall_filter}
 \end{figure}
 
-When the user makes selections in the Filter View, the Filter button changes color, as demonstrated in Figure \ref{fig:date_filter}.
+When the user makes selections in the Filter View, the Filter button changes color, as demonstrated in Figure~\ref{fig:date_filter}.
 Clicking on the Filter button applies the selections made in the Filter View to the other two views.
 Selections made in the Filter View persist on submission, so that the user can make selections serially.
 
 The Date Filter allows users to view data from between a range of dates.
-Clicking on either date field opens up a date range picker, shown in Figure \ref{fig:date_filter}.
+Clicking on either date field opens up a date range picker, shown in Figure~\ref{fig:date_filter}.
 Users can also type in the date manually.
 This causes the Graph View to only graph data collected between these two dates.
 The Season Filter allows users to view data collected during certain seasons across all years.
@@ -168,10 +165,10 @@ The Season Filter allows users to view data collected during certain seasons acr
 }
 \end{figure}
 
-The Taxa Filter, shown in Figure \ref{fig:taxa_filter}, allows users to select orders, families, gena, and species of interest hierarchically.
+The Taxa Filter, shown in Figure~\ref{fig:taxa_filter}, allows users to select orders, families, genus, and species of interest hierarchically.
 Users can select a radio button at any level in the hierarchy.
 Selecting a parent node in the Taxa Filter supplies all the data from its children and none of the data from its siblings to the Graph View.
-The Site Filter, shown in Figure \ref{fig:location_filter}, allows users to select bases, drainages, sites, and samples of interest hierarchically.
+The Site Filter, shown in Figure~\ref{fig:location_filter}, allows users to select bases, drainages, sites, and samples of interest hierarchically.
 Selecting a parent node in the Site Filter supplies all the data from its children and none of the data from its siblings to the Graph and Map Views.
 Users can click on the triangle next to each parent to toggle whether its children are collapsed or expanded.
 Expanding or collapsing children simply determines whether or not they show on screen, and does not affect selection.
@@ -179,21 +176,21 @@ Expanding or collapsing children simply determines whether or not they show on s
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.25\textwidth]{images/taxa_filter.png}
-\label{fig:taxa_filter}
 \captionsetup{justification=centering}
 \caption{
   The Taxa Filter allows the user to select an arbitrary level of biological taxonomy and all its children.
 }
+\label{fig:taxa_filter}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.25\textwidth]{images/location_filter.png}
-\label{fig:location_filter}
 \captionsetup{justification=centering}
 \caption{
   The Location Filter allows the user to select an arbitrary location and all its children.
 }
+\label{fig:location_filter}
 \end{figure}
 
 Jasper was assigned to developing the Filter View.
@@ -202,7 +199,7 @@ His experience using git for collaborative projects was limited, so on multiple 
 His experience with web development was also limited, so tasks such as setting up a server required assistance.
 
 When it came to writing code, the Filter View presented two main challenges.
-The first was extracting meaningul information from the data posted by the filters.
+The first was extracting meaningful information from the data posted by the filters.
 To do this, we created a Filter Helper class that populates a dictionary with all the relevant fields for refining queries.
 The second major challenge was making filter selections persistent.
 To do this, we had to embed code in our html template to populate the fields from the data in the Filter Helper dictionary.
@@ -212,19 +209,20 @@ As such, data flows from the input forms in the Filter View, to the Filter Helpe
 % @TODO: ALEC
 
 \subsection{Graph View} % @TODO: TY - Graph View
-The graph view portion of our web tool is alpha-level ready.
-We have inter-actable example charts already deployed that render  static data.
-A couple of them even have data being dynamically loaded into them from the database, but that wasn’t an alpha-level goal for us, so we are focusing on that for the beta release.
-The particular statistics of interest haven’t been nailed-down yet, so our sponsor wanted us to have a proof-of-concept with just displaying how example graphs would look.
+The graph view portion of our web tool is beta-level ready.
+We have fully developed charts deployed that render dynamically-loaded data based off of filter input.
+Our goal with these graphs for the beta release was to have each one not only pulling in data from the database, but rendering it in the correct way with x-values and labels set to whatever the parameters of interest implied.
+While we have three graphs that show exactly what our sponsor requested, we still have a little bit of honing to do in terms of a stretch goal to get very specific graphs to display.
 We are able to customize every aspect of them in regards to color, spacing, font, layout, etc.
-An example of what the graph-portion looks like is shown above.
+An example of what the graph-portion looks like is shown in Figure~\ref{fig:graph_view}.
 When the page is resized to be smaller, the graph window view will display a horizontal scroll bar so that the user can still see the metrics they’re interested in without having to scrunch them up.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.45\textwidth]{images/figure_6.jpg}
+\includegraphics[width=0.75\textwidth]{images/graph_view.jpg}
 \captionsetup{justification=centering}
 \caption{Graph View}
+\label{fig:graph_view}
 \end{figure}
 
 One of the graphs that we were successful in dynamically rendering data into was the pie-chart that displayed the number of biodiversity readings within a specific order.
@@ -233,9 +231,10 @@ We just wanted to have the biodiversity distribution pie chart available for alp
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.25\textwidth]{images/figure_7.jpg}
+\includegraphics[width=0.35\textwidth]{images/pie_chart.jpg}
 \captionsetup{justification=centering}
 \caption{Pie chart showing order distribution}
+\label{fig:pie_chart}
 \end{figure}
 
 The graph below displays a functionality in c3 that is really useful and is one of the primary reasons that we chose c3 as our graphing library for development.
@@ -246,9 +245,10 @@ If the user wants to ‘zoom in’ on those particular small readings, they coul
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.25\textwidth]{images/figure_8.jpg}
+\includegraphics[width=0.35\textwidth]{images/pie_chart_collapsed.jpg}
 \captionsetup{justification=centering}
 \caption{Showing the interactive pie chart}
+\label{fig:pie_chart_collapsed}
 \end{figure}
 
 During development we encountered some varyingly-sized problems that slowed us down, but we were able to overcome them before alpha release.
