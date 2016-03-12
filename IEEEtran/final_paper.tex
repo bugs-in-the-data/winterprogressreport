@@ -115,7 +115,10 @@ Each contained view has its own template that is embedded in a primary main temp
 \centering
 \includegraphics[width=0.75\textwidth]{images/main_layout.png}
 \captionsetup{justification=centering}
-\caption{Overall site layout view.}
+\caption{
+  Overall site layout view.
+  upper left: filter view, upper right: map view, bottom: graph view.
+}
 \label{fig:layout}
 \end{figure}
 
@@ -223,7 +226,10 @@ When the page is resized to be smaller, the graph window view will display a hor
 \centering
 \includegraphics[width=0.75\textwidth]{images/graph_view.jpg}
 \captionsetup{justification=centering}
-\caption{Graph View}
+\caption{
+  The overall graph view.
+  Displays dynamically generated charts on every page load and filter submission.
+}
 \label{fig:graph_view}
 \end{figure}
 
@@ -244,7 +250,9 @@ C3.js is loaded in the template as well, so we just embed the data object using 
 \centering
 \includegraphics[width=0.70\textwidth]{images/bar_chart.png}
 \captionsetup{justification=centering}
-\caption{Stacked bar chart showing order distribution across locations}
+\caption{
+  Stacked bar chart showing counts of unique taxa observed within a specified taxonomic level across varying locations.
+}
 \label{fig:bar_chart}
 \end{figure}
 
@@ -258,7 +266,9 @@ If the user wants to ‘zoom in’ on those particular small readings, they coul
 \centering
 \includegraphics[width=0.70\textwidth]{images/bar_chart_collapsed.png}
 \captionsetup{justification=centering}
-\caption{Showing the interactive stacked bar chart labels}
+\caption{
+  An example of how the labels can be clicked to hide certain data displayed from view so the user can zero-in on a particular dataset.
+}
 \label{fig:bar_chart_collapsed}
 \end{figure}
 
