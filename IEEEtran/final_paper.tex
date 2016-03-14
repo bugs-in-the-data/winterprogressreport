@@ -282,6 +282,83 @@ Once we were able to break through those barriers everything seemed to tone down
 As we enter into the production-level phase of development we'll be doing much more polish and refinement than actual feature implementation, which is where we wanted to be.
 
 \subsection{Database and Preparing Data}
-% @TODO: ALEC
+
+Creating the database and dealing with the raw data was a core component of the project that we anticipated would be one of the easiest, but gave us quite a few difficulties along the way.
+Throughout development we went through several revisions in the design of our database as we grew to better understand the requirements of our project.
+We also encountered quite a few more complications than we expected, mostly due to errors and inconsistencies in data entry.
+These roadblocks set us back early on, as the database was essential for us to continue beta level development.
+However, soon after our alpha release we ironed out the major issues with the database and quickly got our project up to the full-featured beta requirements.
+
+The first step of preparing our database was creating a schema.
+We created an initial schema in our design document that we made during fall term.
+This schema was more focused on breaking the data into smaller pieces that could be edited in application at a later date.
+As we got further in design and discussed the data more with our client, we found that splitting the data up with way was unnecessary and only led to more work.
+Another issue with the original schema was that the names of the different tables were slightly confusing to use in conversation.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.60\textwidth]{images/old_schema.png}
+	\captionsetup{justification=centering}
+	\caption{
+		The first version of the schema.
+		In this version the species specific information is in its own table, which we determined created unnecessary overhead.
+	}
+	\label{fig:old_schema}
+\end{figure}
+
+After much discussion and a meeting with our client, we arrived at our final version of our schema.
+With this final version we renamed the sample groups to samples as they were the unit of a single collection of data.
+We changed the sample in the original schema to subsample as they were all simply counts of a species in an overall sample.
+The species data that was separated out in the initial version was merged into the subsample table as we had determined it did not justify the extra work.
+Unlike the other tables, the sites table remained relatively unchanged.
+During our meeting with our clients we also established which fields of the database were important and which were unnecessary.
+At this point we had arrived at our final schema and could start the process of converting our raw data to be usable by our database and by extension our application.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.70\textwidth]{images/new_schema.png}
+	\captionsetup{justification=centering}
+	\caption{
+		The final version of the schema.
+		This version renames sample group and sample to sample and subsample, respectively.
+		It also merges the species table into the subsample table.
+	}
+	\label{fig:new_schema}
+\end{figure}
+
+Now that we had our schema we created a MySQL database that would hold our data, which proved very simple to accomplish.
+Then came the hard part, converting the thousands of lines of manual data entry with no error-checking into a form usable by our system.
+We were given the data in excel document format which wasn't ideal for our purposes.
+Our first try to convert this document into a CSV that we could parse with a script.
+This gave us trouble because some of the columns had commas in them.
+Next we tried a CSV delimited on tabs, which also didn't work because some fields had tabs.
+We did the same with semicolons but to no avail, as there were fields that had semicolons as well.
+Eventually, we found that the problem column was the comments, were the data collectors wrote down various notes on the data.
+We were told by our client that this column wasn't needed to we simple excluded that column and created a clean CSV with tabs as a delimiter.
+With that we finally had our data in a form that we could parse with a script.
+
+The next thing we did was create a python script to load our data into the database.
+This script first started by loading the CSV into memory.
+Then it iterated over each row and inserted the memory related to sites into the database.
+It then did the same process again for both samples and subsamples.
+The script was completely safe to run multiple times as it would check if an entry exists in the database before making an insertion.
+At this point we had the data in the database, but would find that there were several issues that needed to be addressed before we could use all of it.
+
+The first issue we encountered was with trying to make the data work with the map view.
+The coordinates that were supplied in the data were in UTM coordinates, which were incompatible with the ArcGis mapping API that we were using.
+While at first we thought this would be a simple conversion to latitude and longitude we found it was a very complex conversion between a flat system and a spherical system.
+To remedy this we created two additional fields for latitude and longitude and created a python script that would populate these fields with the result of the complex calculation.
+This made it so we wouldn't have to recalculate the latitude and longitude for every point every time we loaded the map.
+
+The next issue we encountered was with there being errors in the coordinates provided.
+Several points were being displayed on the map that were in Mexico or the Pacific ocean, two places where there was definitely so samples being taken.
+After determining that these points were incorrect, we let our client know about them and decided to hide them from view as they were causing issues with the map's zooming feature.
+A similar issue we had was with the inconsistency of the dates of samples.
+Our client had requested a date filter that would show only data that was taken in a specified date range.
+However, we found that the data was incredibly sparse and inconsistent when it came to the date it was taken.
+Often times there was no date and sometimes the format of the date changed completely.
+Our solution was to only filter based on the year that was a separate column that was much more consistent.
+This wasn't an ideal solution and is definitely something we will bring up with our client next term.
+After dealing with these issues, we had attained a beta level database that met our needs and requirements.
 
 \end{document}
