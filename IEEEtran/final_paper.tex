@@ -208,10 +208,75 @@ When it came to writing code, the Filter View presented two main challenges.
 The first was extracting meaningful information from the data posted by the filters.
 To do this, we created a Filter Helper class that populates a dictionary with all the relevant fields for refining queries.
 The second major challenge was making filter selections persistent.
-To do this, we had to embed code in our html template to populate the fields from the data in the Filter Helper dictionary.
+To do this, we had to embed code in our HTML template to populate the fields from the data in the Filter Helper dictionary.
 As such, data flows from the input forms in the Filter View, to the Filter Helper dictionary, back to the input forms.
 
-\subsection{Map View} % @TODO: ALEC
+\subsection{Map View}
+
+The map view changed quite a bit in its purpose throughout the development of our project.
+In the brainstorming phase of our project we imagined it might be a kind of heat map of biodiversity in different areas.
+We learned early on that this wouldn't be the purpose of the map view as it was to imprecise a way to compare data.
+In addition, our data was coming from various collected points along rivers, which wouldn't make sense to make a continuous mesh across a map.
+So we abandoned that idea early on in favor of comparing data using graphs based on the selected data.
+Our next idea for the map view was to use it for selection instead.
+We could select individual points or many points by drawing boxes over them.
+However, we found that this was redundant as we were already using the filter view as a much more precise way of selecting the data to compare.
+Using both would have been needlessly complicated and the points are so close together on the map that it wouldn't have worked well anyway.
+After talking about these issues with the map with our client, we arrived at our final version of the map view, shown in Figure~\ref{fig:default_map}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.50\textwidth]{images/default_map.png}
+	\captionsetup{justification=centering}
+	\caption{
+		The default map view.
+		This shows all the samples that were taken by the research team. The more opaque an area is, the more samples were taken there.
+	}
+	\label{fig:default_map}
+\end{figure}
+
+The purpose of this final map is to show the location and relative density of samples.
+It plots every valid sample on the map as its own point.
+These points are semi-transparent so that you can tell how dense the sampling in an area is based on how opaque that area is.
+It is affected by the location and date filters, which ends up showing you where the data is coming from and where it is localized.
+Every time the map is filtered it zooms to fit only the selected points which can be seen if Figure~\ref{fig:filtered_map}.
+The map turned out a lot different than we first thought it to be, but it important in giving context to the data that is being viewed.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.70\textwidth]{images/filtered_map.png}
+	\captionsetup{justification=centering}
+	\caption{
+		A filtered map view.
+		This shows all the samples that are part of Fort Huachuca. It also zoom the map to cover just those points.
+	}
+	\label{fig:filtered_map}
+\end{figure}
+
+There where several major issues we ran into when working on the map view.
+The first was the issue of UTM coordinates.
+The data we had been given was in UTM coordinates which don't translate very well to the standard latitude and longitude coordinates.
+Unfortunately, ArcGis doesn't work with UTM coordinates so we needed to make this conversion anyway.
+To do that, we simply used a python script to calculate the coordinates for each sample and store the answer in new fields in the database.
+
+The more difficult problem we had with the map was that several of the samples had bad coordinates.
+In fact, many of the samples didn't have coordinates at all, or were missing a part of the UTM coordinate system.
+This was a non-issue, as we could simply not display these coordinates.
+However, we had several samples where the coordinates were input incorrectly, which caused them to show up in Mexico or the Pacific ocean.
+These were more troublesome as they both misrepresented the data, and caused a vital feature of the map to work improperly.
+Specifically, it caused the code that automatically fits the map to the current points to zoom out so far that you couldn't even see the map.
+As you can imagine, this was a bit difficult to debug at first as we couldn't even seen the points that were causing the issue.
+First, we looked at all the samples sorted by coordinates and hid the outliers.
+This dealt with the points that showed up in the wrong areas, but there was still a point that was causing the weird zoom out bug.
+To solve the issue, we made use of the filtering feature of our application.
+We rendered different groups of points until we broke the map, then looked at each group within that group until we broke the map, and so on.
+Eventually we had narrowed it down to the point that was causing the problem.
+Then, we simply hid that point and the zooming feature of the map worked perfectly fine.
+
+The map component of the project probably changed the most throughout development.
+At first we envisioned it as a way to display biodiversity, then as a way to select our desired data.
+We ended on using it as a way to give context to the data we are looking at, as well as displaying sample location and density.
+While it changed a lot, we found a good way to make it useful to those using our application.
 
 \subsection{Graph View} % @NOTE: TY - Graph View
 The graph view portion of our web tool is beta-level ready.
@@ -290,7 +355,7 @@ These roadblocks set us back early on, as the database was essential for us to c
 However, soon after our alpha release we ironed out the major issues with the database and quickly got our project up to the full-featured beta requirements.
 
 The first step of preparing our database was creating a schema.
-We created an initial schema in our design document that we made during fall term.
+We initially used the schema we created for our design document, shown in Figure~\ref{fig:old_schema}.
 This schema was more focused on breaking the data into smaller pieces that could be edited in application at a later date.
 As we got further in design and discussed the data more with our client, we found that splitting the data up with way was unnecessary and only led to more work.
 Another issue with the original schema was that the names of the different tables were slightly confusing to use in conversation.
@@ -306,7 +371,7 @@ Another issue with the original schema was that the names of the different table
 	\label{fig:old_schema}
 \end{figure}
 
-After much discussion and a meeting with our client, we arrived at our final version of our schema.
+After much discussion and a meeting with our client, we arrived at our final version of our schema, shown in Figure~\ref{fig:new_schema}.
 With this final version we renamed the sample groups to samples as they were the unit of a single collection of data.
 We changed the sample in the original schema to subsample as they were all simply counts of a species in an overall sample.
 The species data that was separated out in the initial version was merged into the subsample table as we had determined it did not justify the extra work.
